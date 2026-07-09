@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PookieSMP Rankings</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+    background:#0b0b12;
+}
+
+
+.nav{
+    padding:20px;
+    text-align:center;
+}
+
+
+.nav a{
+    color:#ff8fd3;
+    text-decoration:none;
+    font-size:20px;
+}
+
+
+.title{
+    text-align:center;
+    color:#ff8fd3;
+    font-size:55px;
+    margin:20px;
+    text-shadow:0 0 20px #ff4fb3;
+}
+
+
+.search{
+
+display:block;
+margin:30px auto;
+width:320px;
+padding:15px;
+border-radius:12px;
+border:none;
+font-size:16px;
+
+}
+
+
+
+.table-box{
+
+width:90%;
+margin:auto;
+background:#151521;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 0 30px #ff4fb333;
+
+}
+
+
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+
+th{
+
+background:#ff72c6;
+padding:18px;
+
+}
+
+
+
+td{
+
+padding:15px;
+text-align:center;
+border-bottom:1px solid #292938;
+
+}
+
+
+
+.player{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+
+
+.head{
+
+width:45px;
+height:45px;
+border-radius:8px;
+
+}
+
+
+
+.tier{
+
+padding:8px 14px;
+border-radius:10px;
+font-weight:bold;
+color:white;
+
+}
+
+
+
+.ht1{
+
+background:#ff3b6b;
+
+}
+
+
+.ht2{
+
+background:#ff8c42;
+
+}
+
+
+.ht3{
+
+background:#ffd43b;
+color:black;
+
+}
+
+
+.lt1{
+
+background:#4dff88;
+color:black;
+
+}
+
+
+.lt2{
+
+background:#42c8ff;
+
+}
+
+
+.rank{
+
+font-size:25px;
+font-weight:bold;
+
+}
+
+
+.gold{
+
+color:#ffd700;
+
+}
+
+
+.silver{
+
+color:#c0c0c0;
+
+}
+
+
+.bronze{
+
+color:#cd7f32;
+
+}
+
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<div class="nav">
+
+<a href="index.html">
+🏠 Home
+</a>
+
+</div>
+
+
+
+<h1 class="title">
+🌸 PookieSMP Rankings
+</h1>
+
+
+
+<input 
+class="search"
+id="search"
+placeholder="Search IGN..."
+>
+
+
+
+<div class="table-box">
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>#</th>
+<th>Player</th>
+<th>Region</th>
+<th>Overall</th>
+<th>Sword</th>
+<th>Crystal</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="list"></tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+<script>
+
+
+const search=document.getElementById("search");
+
+
+search.addEventListener("input",()=>{
+
+
+let value=search.value.toLowerCase();
+
+
+document.querySelectorAll("#list tr").forEach(row=>{
+
+
+if(row.innerText.toLowerCase().includes(value)){
+
+row.style.display="table-row";
+
+}
+
+else{
+
+row.style.display="none";
+
+}
+
+
+});
+
+
+});
+
+
+</script>
+
+
+<script>
+
+const list = document.getElementById("list");
+
+// get players from admin panel
+let players = JSON.parse(localStorage.getItem("players") || "[]");
+
+// tier order (for sorting)
+const tierOrder = ["HT1","HT2","HT3","LT1","LT2","LT3"];
+
+// sort players
+players.sort((a,b)=>{
+return tierOrder.indexOf(a.overall) - tierOrder.indexOf(b.overall);
+});
+
+list.innerHTML = "";
+
+// render players
+players.forEach((p,i)=>{
+
+let rankClass = "";
+if(i==0) rankClass="gold";
+if(i==1) rankClass="silver";
+if(i==2) rankClass="bronze";
+
+list.innerHTML += `
+<tr>
+
+<td class="rank ${rankClass}">${i+1}</td>
+
+<td>
+<div class="player">
+<img class="head" src="${p.skin}">
+${p.name}
+</div>
+</td>
+
+<td>${p.region}</td>
+
+<td><span class="tier">${p.overall}</span></td>
+<td><span class="tier">${p.sword}</span></td>
+<td><span class="tier">${p.crystal}</span></td>
+
+</tr>
+`;
+
+});
+
+</script>
+<script src="tatti.js"></script>
+</body>
+
+</html>
